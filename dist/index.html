@@ -1,0 +1,162 @@
+<h3>home</h3>
+
+<!-- <h3>home</h3>
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Simple Chat</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.js""></script>
+    <script src=" https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        .bg-custom {
+            background-color: #e0ece4;
+        }
+    </style>
+</head>
+
+<body class="bg-custom">
+    <div id="main">
+    </div>
+    <footer>
+        <div id="footer" class="fixed-bottom bg-custom">
+            <form class="f">
+                <div class="row p-2 d-none d-sm-flex">
+                    <div class="col-3">
+                        <input class="form-control" placeholder="Nama" id="name1" value="">
+                    </div>
+                    <div class="col-7 px-0">
+                        <input class="form-control msgInput" placeholder="Pesan" id="message1" value="">
+                    </div>
+                    <div class="col-2">
+                        <button class="form-control btn btn-primary text-white send" type="submit">Kirim</button>
+                    </div>
+                </div>
+            </form>
+            <form class="f">
+                <div class="row p-2 d-flex d-sm-none">
+                    <div class="col-9 pr-1">
+                        <input class="form-control" placeholder="Nama" id="name2" value="">
+                    </div>
+                    <div class="col-3 pl-1">
+                        <button class="form-control btn btn-primary text-white send" type="submit">Kirim</button>
+                    </div>
+                </div>
+                <div class="row pl-2 pt-0 pr-2 pb-2 pt-0 d-flex d-sm-none">
+                    <div class="col-12">
+                        <input class="form-control msgInput" placeholder="Pesan" id="message2" value="">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </footer>
+    <script>
+        var socket = io()
+        const URL = "https://realtime-chat-backend.netlify.app/.netlify/functions/api/messages"
+
+        $(document).ready(() => {
+            const h = $('#footer').height()
+            $('#main').css("margin-bottom", `${h}px`)
+
+            const w = $(window).width();
+            if (w >= 576) {
+                $("#name1").prop('required', true);
+                $("#message1").prop('required', true);
+
+                $("#name2").prop('required', false);
+                $("#message2").prop('required', false);
+            } else {
+                $("#name1").prop('required', false);
+                $("#message1").prop('required', false);
+
+                $("#name2").prop('required', true);
+                $("#message2").prop('required', true);
+            }
+
+            $(() => {
+                $('.f').submit(e => {
+                    e.preventDefault()
+                    let name1 = $("#name1").val()
+                    let message1 = $("#message1").val()
+                    let name2 = $("#name2").val()
+                    let message2 = $("#message2").val()
+                    let name = name1 === "" ? name2 : name1
+                    let message = message1 === "" ? message2 : message1
+                    sendMessage({
+                        name,
+                        message
+                    })
+                    $("#message1").val("")
+                    $("#message2").val("")
+                })
+                getMessagesOld()
+            })
+            const addMessagesOld = msg => {
+                const name = msg.name
+                const message = msg.message
+                const cardTitle = $('<h5 class="card-title">').text(name)
+                const cardText = $('<p class="card-text">').text(message)
+                const cardBody = $('<div class="card-body">').append(cardTitle).append(cardText)
+                const card = $('<div class="card mb-2 bg-white mx-2 mx-sm-5">').append(cardBody)
+                $('#main').append(card)
+            }
+            const addMessages = msg => {
+                const name = msg.name
+                const message = msg.message
+                const cardTitle = $('<h5 class="card-title">').text(name)
+                const cardText = $('<p class="card-text">').text(message)
+                const cardBody = $('<div class="card-body">').append(cardTitle).append(cardText)
+                const card = $('<div class="card mb-2 bg-white mx-2 mx-sm-5">').append(cardBody)
+                $('#main').append(card)
+                $('html, body').animate({
+                    scrollTop: card.offset().top
+                }, 500);
+            }
+            socket.on('message', addMessages)
+            const getMessages = () => {
+                $.ajax({
+                    type: "get",
+                    url: URL,
+                    success: data => {
+                        console.log("get success")
+                        data.forEach(addMessages)
+                    }
+                })
+            }
+            const getMessagesOld = () => {
+                $.ajax({
+                    type: "get",
+                    url: URL,
+                    success: data => {
+                        console.log("get success")
+                        data.forEach(addMessagesOld)
+                    }
+                })
+            }
+            const sendMessage = message => {
+                console.log(message)
+                $.ajax({
+                    type: "post",
+                    data: message,
+                    url: URL,
+                    success: () => {
+                        console.log("send success")
+                    }
+                })
+            }
+        })
+    </script>
+</body>
+
+</html> -->
