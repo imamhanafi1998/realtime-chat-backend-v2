@@ -138,6 +138,12 @@ app.get("/api", (req, res) => {
   res.json({message: "Hello"})
 });
 
+app.get("/delete", (req, res) => {
+  users = []
+  socketIO.emit("newUserResponse", users)
+  res.json({message: "success"})
+});
+
 // app.use(`/.netlify/functions/api`, router)
 
    
